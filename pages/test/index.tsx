@@ -5,7 +5,7 @@ import fs from 'fs/promises'
 
 export const getStaticProps = async () => {
 
-	const getParseData = async () => {
+	const getParsedData = async (): Promise<{ title: string }> => {
 		const filePath = path.join(process.cwd(), 'public', 'staticData.json')
 
 		try {
@@ -17,7 +17,7 @@ export const getStaticProps = async () => {
 
 	}
 
-	const title = ''
+	const { title } = await getParsedData()
 
 	return {
 		props: {
