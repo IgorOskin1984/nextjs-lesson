@@ -9,4 +9,5 @@ export const LoginNavigate: FC<PropsWithChildren<{}>> = ({ children }) => {
 	if (!isAuth) router.push("/test")
 
 	return <>{children}</>
+	//*LoginNavigate принимает параметрами children и возвращает их. Это hoc - hight order component
 }
