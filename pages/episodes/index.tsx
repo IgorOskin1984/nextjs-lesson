@@ -1,38 +1,50 @@
-import {API} from 'assets/api/api';
-import {EpisodeType, ResponseType} from 'assets/api/rick-and-morty-api';
-import {PageWrapper} from 'components/PageWrapper/PageWrapper';
-import {Card} from 'components/Card/Card';
-import {getLayout} from 'components/Layout/BaseLayout/BaseLayout';
-import {GetServerSideProps} from 'next';
+import { API } from 'assets/api/api';
+import { EpisodeType, ResponseType } from 'assets/api/rick-and-morty-api';
+import { PageWrapper } from 'components/PageWrapper/PageWrapper';
+import { Card } from 'components/Card/Card';
+import { getLayout } from 'components/Layout/BaseLayout/BaseLayout';
+import { GetServerSideProps } from 'next';
 
-export const getServerSideProps: GetServerSideProps = async ({res}) => {
-    const episodes = await API.rickAndMorty.getEpisodes()
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+	const episodes = await API.rickAndMorty.getEpisodes()
+	const isAuth = true;
 
-    if (!episodes) {
-        return { notFound: true }
-    }
+	if (!episodes) {
+		return { notFound: true }
+	}
 
-    return {
-        props: { episodes }
-    }
+	if (!isAuth) {
+		return {
+			redirect: {
+				destination: '/test',
+				permanent: false
+			},
+		}
+	}
+
+	return {
+		props: { episodes }
+	}
 }
 
+
+
 type PropsType = {
-    episodes: ResponseType<EpisodeType>
+	episodes: ResponseType<EpisodeType>
 }
 
 const Episodes = (props: PropsType) => {
-    const {episodes} = props
+	const { episodes } = props
 
-    const episodesList = episodes.results.map(episode => (
-        <Card key={episode.id} name={episode.name}/>
-    ))
+	const episodesList = episodes.results.map(episode => (
+		<Card key={episode.id} name={episode.name} />
+	))
 
-    return (
-        <PageWrapper>
-            {episodesList}
-        </PageWrapper>
-    )
+	return (
+		<PageWrapper>
+			{episodesList}
+		</PageWrapper>
+	)
 }
 
 Episodes.getLayout = getLayout
